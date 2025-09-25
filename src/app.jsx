@@ -7,6 +7,7 @@ const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
 const supabaseKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
 const supabase = createClient(supabaseUrl, supabaseKey);
 
+// Productos por categoría
 const categorias = {
   Salchicha: [
     { nombre: "Ramen", precio: 45 },
@@ -31,6 +32,12 @@ const categorias = {
   ],
 };
 
+// Extras como productos independientes
+const extras = [
+  { nombre: "Orden de Papas", precio: 40 },
+  { nombre: "Salchipulps", precio: 35 },
+];
+
 export default function App() {
   const [ticket, setTicket] = useState([]);
   const [note, setNote] = useState("");
@@ -40,14 +47,21 @@ export default function App() {
   const agregarProducto = (categoria, producto) => {
     setTicket([
       ...ticket,
-      { categoria, nombre: producto.nombre, precio: producto.precio, papas: false },
+      { categoria, nombre: producto.nombre, precio: producto.precio, papas: false, extras: [] },
+    ]);
+  };
+
+  const agregarExtra = (extra) => {
+    setTicket([
+      ...ticket,
+      { categoria: "Extras", nombre: extra.nombre, precio: extra.precio, papas: false, extras: [] },
     ]);
   };
 
   const togglePapas = (index) => {
     const newTicket = [...ticket];
     newTicket[index].papas = !newTicket[index].papas;
-    newTicket[index].precio = newTicket[index].precio + (newTicket[index].papas ? 15 : -15);
+    newTicket[index].precio += newTicket[index].papas ? 15 : -15;
     setTicket(newTicket);
   };
 
@@ -58,7 +72,7 @@ export default function App() {
     setTicket(newTicket);
   };
 
-  const total = ticket.reduce((acc, item) => acc + Number(item.precio), 0);
+  const total = ticket.reduce((acc, item) => acc + item.precio, 0);
 
   const guardarTicket = async () => {
     if (ticket.length === 0) return setMsg("No hay productos para guardar.");
@@ -71,11 +85,12 @@ export default function App() {
         nombre: p.nombre,
         categoria: p.categoria,
         papas: p.papas,
+        extras: p.extras,
         precio: p.precio,
       })),
-      subtotal: total || 0,
+      subtotal: total,
       tax: 0,
-      total: total || 0,
+      total: total,
       note,
     };
 
@@ -109,6 +124,18 @@ export default function App() {
         </div>
       ))}
 
+      {/* Sección de extras independientes */}
+      <div className="categoria">
+        <h2>Extras</h2>
+        <div className="products">
+          {extras.map((ext, i) => (
+            <button key={i} onClick={() => agregarExtra(ext)}>
+              {ext.nombre} <br /> ${ext.precio}
+            </button>
+          ))}
+        </div>
+      </div>
+
       <div className="ticket-preview">
         <h2>Ticket</h2>
         {ticket.length === 0 ? (
@@ -118,9 +145,11 @@ export default function App() {
             {ticket.map((item, i) => (
               <li key={i}>
                 {item.categoria} - {item.nombre} - ${item.precio}{" "}
-                <button className="papas-btn" onClick={() => togglePapas(i)}>
-                  {item.papas ? "Quitar papas" : "+ Papas $15"}
-                </button>
+                {item.categoria !== "Extras" && (
+                  <button className="papas-btn" onClick={() => togglePapas(i)}>
+                    {item.papas ? "Quitar papas" : "+ Papas $15"}
+                  </button>
+                )}
                 <button className="remove-btn" onClick={() => eliminarProducto(i)}>
                   ❌
                 </button>
