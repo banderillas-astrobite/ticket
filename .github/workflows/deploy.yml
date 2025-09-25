@@ -3,29 +3,31 @@ name: Deploy Vite App to GitHub Pages
 on:
   push:
     branches:
-      - main
+      - principal # O 'main', depende del nombre de tu rama principal
 
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
-
     steps:
-      - uses: actions/checkout@v4
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v3
+      - name: Checkout 🛎️
+        uses: actions/checkout@v4
         with:
-          node-version: '20'
+          fetch-depth: 0 # Asegura que Git Pages funcione
 
-      - name: Install dependencies
+      - name: Setup Node.js ⚙️
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20' # Puedes usar una versión LTS, como '18' o '20'
+
+      - name: Install dependencies 🏗️
         run: npm install
 
-      - name: Build
-        run: npm run build
+      - name: Build 🔨
+        # Aquí está la corrección: usa 'npm run build' que ahora usa 'npx'
+        run: npm run build 
 
-      - name: Deploy
-        uses: peaceiris/actions-gh-pages@v4
+      - name: Deploy to GitHub Pages 🚀
+        uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./dist
-          publish_branch: gh-pages
+          publish_dir: ./dist # Asegúrate de que esta sea la carpeta de salida de tu build (por defecto es 'dist' para Vite)
