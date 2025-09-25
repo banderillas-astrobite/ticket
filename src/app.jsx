@@ -35,7 +35,7 @@ const categorias = {
 // Extras como productos independientes
 const extras = [
   { nombre: "Orden de Papas", precio: 40 },
-  { nombre: "Salchipulps", precio: 35 },
+  { nombre: "Salchipulpos", precio: 35 },
 ];
 
 export default function App() {
