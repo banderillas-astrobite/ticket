@@ -1,0 +1,52 @@
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  background: linear-gradient(to bottom, #fff, #ffe4b2);
+  color: #333;
+}
+
+.app {
+  max-width: 600px;
+  margin: auto;
+  padding: 1rem;
+}
+
+h1 {
+  text-align: center;
+  color: #ff4500;
+}
+
+h2 {
+  margin-top: 1.5rem;
+  color: #d35400;
+}
+
+.products {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+}
+
+.products button {
+  padding: 1rem;
+  border: none;
+  border-radius: 8px;
+  background: #ffb347;
+  color: white;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.products button:hover {
+  background: #ff9933;
+}
+
+.ticket-preview {
+  margin-top: 2rem;
+  padding: 1rem;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  background: white;
+}
