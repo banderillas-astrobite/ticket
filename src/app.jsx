@@ -53,12 +53,12 @@ export default function App() {
 
   const eliminarProducto = (index) => {
     const newTicket = [...ticket];
-    if (newTicket[index].papas) newTicket[index].precio -= 15; // Ajuste si tenía papas
+    if (newTicket[index].papas) newTicket[index].precio -= 15;
     newTicket.splice(index, 1);
     setTicket(newTicket);
   };
 
-  const total = ticket.reduce((acc, item) => acc + item.precio, 0);
+  const total = ticket.reduce((acc, item) => acc + Number(item.precio), 0);
 
   const guardarTicket = async () => {
     if (ticket.length === 0) return setMsg("No hay productos para guardar.");
@@ -67,10 +67,15 @@ export default function App() {
 
     const ticketData = {
       ticket_number: `T-${Date.now()}`,
-      items: ticket.map((p) => ({ nombre: p.nombre, categoria: p.categoria, papas: p.papas, precio: p.precio })),
-      subtotal: total,
+      items: ticket.map((p) => ({
+        nombre: p.nombre,
+        categoria: p.categoria,
+        papas: p.papas,
+        precio: p.precio,
+      })),
+      subtotal: total || 0,
       tax: 0,
-      total: total,
+      total: total || 0,
       note,
     };
 
